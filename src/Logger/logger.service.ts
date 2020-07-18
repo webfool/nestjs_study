@@ -2,7 +2,7 @@
  * 总结：通过 extends Logger 生成自定义的 logger service，再在 logger Module 生成 logger service 的单例
  * 
  * 推荐的定义 CustomLoggerService 的方式：
- * - class CustomLoggerService extends Logger {}
+ * - class CustomLoggerService extends Logger implements LoggerService {}
  * 
  * 方法一：
  * 目的：为根实例添加 logger 实例
