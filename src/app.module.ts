@@ -3,10 +3,11 @@ import { Module } from '@nestjs/common'
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { LoginModule } from './features/Login/login.module'
-import { APP_INTERCEPTOR } from '@nestjs/core';
+import { APP_INTERCEPTOR, APP_FILTER } from '@nestjs/core';
 // import { LoggerMiddleware } from './middlewares/logger.middleware'
 import { LoggerInterceptor } from './interceptors/logger.interceptor'
 import { CustomLoggerModule } from './Logger/logger.module'
+import { HttpExceptionFilter } from './exceptionFilter/http.exceptionFilter'
 
 @Module({
   imports: [CustomLoggerModule, LoginModule],
@@ -15,6 +16,10 @@ import { CustomLoggerModule } from './Logger/logger.module'
     {
       provide: APP_INTERCEPTOR,
       useClass: LoggerInterceptor
+    },
+    {
+      provide: APP_FILTER,
+      useClass: HttpExceptionFilter
     },
     AppService
   ],

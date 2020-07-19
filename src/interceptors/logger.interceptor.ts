@@ -32,6 +32,7 @@ export class LoggerInterceptor<T> implements NestInterceptor {
     const ctx = context.switchToHttp()
     const { method ,url, headers, body } = ctx.getRequest<Request>()
     const ua = headers['user-agent']
+
     this.customLoggerService.log(
       `${ua} ${method} ${url} body: ${JSON.stringify(body)} res: ${JSON.stringify(data)}`
     )
