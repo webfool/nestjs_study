@@ -12,12 +12,15 @@ async function bootstrap() {
     // logger: new CustomLoggerService()
   });
 
-  app.useLogger(app.get(CustomLoggerService))
+  const logger = app.get(CustomLoggerService)
+  app.useLogger(logger)
 
   // 配置静态资源路径
   app.useStaticAssets(join(__dirname, '..', 'static'), {
     prefix: '/static/'
   })
-  await app.listen(3000);
+  await app.listen(3000, () => {
+    logger.log('app is listen in 3000')
+  });
 }
 bootstrap();

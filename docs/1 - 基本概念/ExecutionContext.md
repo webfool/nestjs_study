@@ -1,5 +1,9 @@
 可以通过两个对象获取当前执行上下文信息：ArgumentsHost 和 ExecutionContext
 
+#### 总结
+ArgumentHost: 用于获取请求对象和返回对象，在 filter 中提供
+ExecutionContext: 获取请求/返回对象，也可以获取 handler 和 controller，在 guard 和 interceptor 中提供
+
 #### ArgumentsHost
 框架会在某些场景下给你提供 ArgumentsHost 的实例，如 exception filter 的 catch 方法中
 
