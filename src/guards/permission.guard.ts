@@ -11,6 +11,8 @@ export class PermissionGuard implements CanActivate {
 
   canActivate(context: ExecutionContext): boolean {
     let handlerPermissions = this.reflector.get<string | string[]>(PERMISSION_METADATA, context.getHandler())
+    if (!handlerPermissions) return true
+
     handlerPermissions = typeof handlerPermissions === 'string' ? [handlerPermissions] : handlerPermissions
     if(handlerPermissions.some(r => staticPermission.includes(r))) return true
     else throw new UnauthorizedException('don not have permission') 
