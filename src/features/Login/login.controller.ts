@@ -2,6 +2,7 @@ import { Controller, Get, Param, ParseIntPipe, Query, Post, Body, ParseArrayPipe
 import { LoginService } from './login.service'
 import { HasPermission } from "src/decorators/permission.decorator";
 import { Item } from './login.type'
+import { Cookie } from 'src/decorators/cookie.decorator'
 
 @Controller('account')
 export class LoginController {
@@ -9,8 +10,10 @@ export class LoginController {
 
   @Get('login')
   @HasPermission('login')
-  login(): string {
-    return this.loginService.login()
+  login(@Cookie() cookie: string): string {
+    console.log('cookie ->', cookie)
+    return cookie
+    // return this.loginService.login()
   }
 
   @Get('logout')
