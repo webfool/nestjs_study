@@ -1,9 +1,41 @@
+## 控制反转和依赖注入
+控制反转和依赖注入其实是表达同一概念。
+
+采用控制反转和依赖注入的方式，有如下优点：
+- 低耦合：对象只需要配置自己需要的资源，不需要自己去创建资源，能够降低资源耦合
+- 功能复用：
+
+#### 控制反转 IOC (Inversion Of Control)
+传统的程序设计中，通常在对象中通过 new 的方式生成依赖的实例对象，属于主动创建依赖对象。控制反转的设计中，有一个专门的容器负责对象的创建和控制对象的获取。
+
+#### 依赖注入 DI（Dependency Injection）
+应用程序依赖 IOC 容器，容器为应用程序注入依赖对象。
+
+
+
+
 ## 装饰器
 装饰器：一种用来修改类和类属性的语法，它是在编译阶段执行的代码。它的优点是语义强，可拔插方便。
 
 使用语法：
 - @+(函数名/生成函数的表达式)
-- 多个装饰器时，由上到下此次对装饰器表达式求值，再由下至上执行
+- 多个装饰器时，由上到下此次对装饰器表达式求值，再由下至上进行装饰
+
+装饰器接收的参数：
+- 类装饰器：类对象
+- 属性装饰器：属性所在的对象、属性名
+- 方法装饰器：方法所在的对象、方法名、描述对象
+- 参数装饰器：方法所在的对象、方法名、参数位置(从0开始)，特别注意 constructor 的参数装饰器分别接收：类、undefined、参数位置
+
+添加装饰器后，ts 编译会自动存储的元信息：
+- 为类或者类 constructor 的方法参数使用了装饰器，ts 编译之后类会存储 design:paramtypes 元信息
+- 为属性添加装饰器，ts 编译之后会存储 design:type 元信息
+- 为方法或方法参数添加装饰器，ts 编译之后会存储 design:type、design:paramtypes、design:returntype 元信息
+
+存储元信息时：
+- 如果类型是 js 的数据类型，则存的元数据是其对应的构造函数
+- 如果类型是 interface，则存的元数据是 Object 构造函数
+
 
 ### 类中使用装饰器
 类装饰器只能接收到一个参数，即为当前装饰的类
@@ -42,8 +74,8 @@ class MyClass {
   @InsPropDec
   from = 'china'
   // 有个细节需要注意：
-  // 此处的实际效果是 MyClass 原型对象 name: undefined，而其每一个生成的实例对象都是 name: 'hw'。
-  // 如果为 name 添加装饰器，其实是对原型对象的 name 属性进行修改，实例对象对该属性的操作将不受影响
+  // 此处的实际效果是 MyClass 原型对象 from: undefined，而其每一个生成的实例对象都是 from: 'hw'。
+  // 如果为 from 添加装饰器，其实是对原型对象的 from 属性进行修改，实例对象对该属性的操作将不受影响
 }
 ```
 
@@ -168,7 +200,7 @@ console.log(Reflect.getMetadata('design:paramtypes', MyClass.prototype, 'say'))
 console.log(Reflect.getMetadata('design:returntype', MyClass.prototype, 'say'))
 ```
 
-## 依赖注入实现
+## 依赖注入简要实现
 ```js
 class MyService {
   a = 1
