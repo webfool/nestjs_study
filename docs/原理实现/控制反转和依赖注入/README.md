@@ -70,7 +70,8 @@ class Project {}
 - 参数装饰器：方法所在的对象、方法名、参数位置(从0开始)，特别注意 constructor 的参数装饰器分别接收：类、undefined、参数位置
 
 ##### 默认存储类型元数据
-如果需要 ts 在编译后会默认存储类型元信息，需要在需存储类型的地方添加装饰器，装饰器的内容不重要。类型元信息存储在以下有3种固定的key下：design:type、design:paramtypes、design:returntype。这个特点对我们实现依赖注入很重要。
+如果需要 ts 在编译后会默认存储类型元信息，需要在需存储类型的地方添加装饰器，装饰器的内容不重要。类型元信息存储在以下有3种固定的key下：design:type、design:paramtypes、design:returntype。这个特点对我们实现依赖注入很重要。另外 ts 还是需要开启 experimentalDecorators 和 emitDecoratorMetadata 配置。即
+> tsc index.ts --experimentalDecorators --emitDecoratorMetadata --target es5
 
 ```js
 class FrontEnd {
@@ -204,7 +205,6 @@ export default class Container {
   }
 }
 ```
-
 # 装饰器结合 Container 的使用案例
 ```js
 class FrontEnd {
@@ -250,12 +250,14 @@ container.addProvide({ provide: pmToken, useClass: Pm})
 const project = container.inject(Project)
 
 console.log('project ->', project)
-/* 
+
+```
+```js
+打印结果：
 project -> Project {
   frontEnd: FrontEnd { frontendLang: [ 'js', 'html', 'css' ] },
   backEnd: BackEnd { backendLang: [ 'java', 'mysql' ] },
   operation: Operation { operationLang: [ 'nginx', 'jenkins' ] },
   pm: Pm { pmLang: [ 'word', 'ppt' ] }
 }
-*/
 ```
