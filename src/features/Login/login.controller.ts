@@ -1,4 +1,4 @@
-import { Controller, Get, Param, ParseIntPipe, Query, Post, Body, ParseArrayPipe } from "@nestjs/common";
+import { Controller, Get, Param, ParseIntPipe, Query, Post, Body, ParseArrayPipe, Req } from "@nestjs/common";
 import { LoginService } from './login.service'
 import { HasPermission } from "src/decorators/permission.decorator";
 import { Item } from './login.type'
@@ -22,14 +22,6 @@ export class LoginController {
     return 'logout'
   }
 
-  // 对基本类型进转换
-  @Get(':id')
-  findOne(
-    @Param('id', ParseIntPipe) data: number
-  ): any {
-    return data
-  }
-
   // 实现对数组每一项的属性过滤和校验
   @Post('list')
   addMany(@Body(new ParseArrayPipe({items: Item, whitelist: true})) list: Item[]): any {
@@ -40,5 +32,38 @@ export class LoginController {
   @Get('info')
   findByIds(@Query('ids', new ParseArrayPipe({separator: ',', items: Number})) ids: number[]): any {
     return ids
+  }
+
+  @Get('testFetch')
+  async fetch(): Promise<string> {
+    // await new Promise((resolve) => {
+    //   setTimeout(resolve, 3000)
+    // })
+    // throw new Error('abc')
+
+    return 'fetchData'
+  }
+
+  @Post('tracker')
+  async getMonitorDataByPost(@Body() body: Record<string, any>): Promise<string> {
+    console.log('query:', body);
+    return 'tracker ok'
+  }
+
+  @Get('tracker')
+  async getMonitorDataByGet(@Query() query: Record<string, any>): Promise<string> {
+    console.log('query:', query);
+    await new Promise((resolve) => {
+      setTimeout(resolve, 2000)
+    })
+    return 'tracker ok'
+  }
+
+  // 对基本类型进转换
+  @Get(':id')
+  findOne(
+    @Param('id', ParseIntPipe) data: number
+  ): any {
+    return data
   }
 }
